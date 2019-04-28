@@ -1,0 +1,183 @@
+[{
+	"id": "49029fdc.561f6",
+	"type": "tab",
+	"label": "开关+天气播报",
+	"disabled": false,
+	"info": ""
+}, {
+	"id": "6cfce137.c53f",
+	"type": "debug",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"active": true,
+	"tosidebar": true,
+	"console": true,
+	"tostatus": true,
+	"complete": "payload",
+	"targetType": "msg",
+	"x": 800,
+	"y": 60,
+	"wires": []
+}, {
+	"id": "25645419.5c3dcc",
+	"type": "http request",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"method": "GET",
+	"ret": "obj",
+	"paytoqs": false,
+	"url": "http://restapi.amap.com/v3/weather/weatherInfo?city=610113&extensions=all&key=19e885f47527d5dd0f09cda23967e4ca",
+	"tls": "",
+	"proxy": "",
+	"authType": "basic",
+	"x": 220,
+	"y": 140,
+	"wires": [
+		["317b383.9ff73c8"]
+	]
+}, {
+	"id": "317b383.9ff73c8",
+	"type": "json",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"property": "payload",
+	"action": "obj",
+	"pretty": true,
+	"x": 270,
+	"y": 280,
+	"wires": [
+		["87af33e2.f0b4e", "7a160884.816778", "6a0e3f87.ec99a"]
+	]
+}, {
+	"id": "c98dfec9.ed215",
+	"type": "ui_audio",
+	"z": "49029fdc.561f6",
+	"name": "voice",
+	"group": "29b7ae31.8967aa",
+	"voice": "zh-CN",
+	"always": true,
+	"x": 850,
+	"y": 160,
+	"wires": []
+}, {
+	"id": "87af33e2.f0b4e",
+	"type": "change",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"rules": [{
+		"t": "set",
+		"p": "payload",
+		"pt": "msg",
+		"to": "payload.forecasts[0].casts[0].date",
+		"tot": "msg"
+	}],
+	"action": "",
+	"property": "",
+	"from": "",
+	"to": "",
+	"reg": false,
+	"x": 490,
+	"y": 60,
+	"wires": [
+		["c98dfec9.ed215", "6cfce137.c53f"]
+	]
+}, {
+	"id": "e597b3a2.6e89e",
+	"type": "function",
+	"z": "49029fdc.561f6",
+	"name": "change",
+	"func": "text = \"气温\"+msg.payload;\n\nif(msg.payload !== \"\")\n{\n    \n    text += \"度\";\n    msg.payload = text;\n    return msg\n}\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 720,
+	"y": 260,
+	"wires": [
+		["c98dfec9.ed215", "6cfce137.c53f"]
+	]
+}, {
+	"id": "7a160884.816778",
+	"type": "change",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"rules": [{
+		"t": "set",
+		"p": "payload",
+		"pt": "msg",
+		"to": "payload.forecasts[0].casts[0].dayweather",
+		"tot": "msg"
+	}],
+	"action": "",
+	"property": "",
+	"from": "",
+	"to": "",
+	"reg": false,
+	"x": 490,
+	"y": 160,
+	"wires": [
+		["c98dfec9.ed215", "6cfce137.c53f"]
+	]
+}, {
+	"id": "6a0e3f87.ec99a",
+	"type": "change",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"rules": [{
+		"t": "set",
+		"p": "payload",
+		"pt": "msg",
+		"to": "payload.forecasts[0].casts[0].daytemp",
+		"tot": "msg"
+	}],
+	"action": "",
+	"property": "",
+	"from": "",
+	"to": "",
+	"reg": false,
+	"x": 490,
+	"y": 260,
+	"wires": [
+		["e597b3a2.6e89e", "6cfce137.c53f"]
+	]
+}, {
+	"id": "7789058a.caea9c",
+	"type": "ui_button",
+	"z": "49029fdc.561f6",
+	"name": "",
+	"group": "29b7ae31.8967aa",
+	"order": 6,
+	"width": 0,
+	"height": 0,
+	"passthru": false,
+	"label": "天气播报",
+	"tooltip": "",
+	"color": "",
+	"bgcolor": "",
+	"icon": "",
+	"payload": "",
+	"payloadType": "date",
+	"topic": "",
+	"x": 220,
+	"y": 40,
+	"wires": [
+		["25645419.5c3dcc"]
+	]
+}, {
+	"id": "29b7ae31.8967aa",
+	"type": "ui_group",
+	"z": "",
+	"name": "WeatherBroadcast",
+	"tab": "4034c311.b665bc",
+	"order": 3,
+	"disp": true,
+	"width": "6",
+	"collapse": false
+}, {
+	"id": "4034c311.b665bc",
+	"type": "ui_tab",
+	"z": "",
+	"name": "SensorShow",
+	"icon": "dashboard",
+	"order": 2,
+	"disabled": false,
+	"hidden": false
+}]
